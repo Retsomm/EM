@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { books, podcasts, youtubeVideos } from "../component/data";
-
+import { Link, useNavigate } from "react-router-dom";
 const Info = () => {
   const [data, setData] = useState({
     books: [],
@@ -8,7 +8,7 @@ const Info = () => {
     podcasts: [],
   });
   const [isLoading, setIsLoading] = useState(true);
-
+  const navigate = useNavigate();
   useEffect(() => {
     // 模擬動態抓取資料，實際上可替換為 API 呼叫
     setTimeout(() => {
@@ -68,14 +68,15 @@ const BookSection = ({ title, items, isLoading }) => (
                 loading="lazy"
               />
               <p className="text-lg font-medium">{item.title}</p>
-              <button className="btn btn-primary w-fit">
-                <a
-                  href={item.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                ></a>
+
+              <Link
+                to={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-primary w-fit"
+              >
                 書店連結
-              </button>
+              </Link>
             </div>
           </div>
         ))}
@@ -118,11 +119,15 @@ const YoutubeSection = ({ title, items, isLoading }) => (
                 loading="lazy"
               />
               <p className="text-lg font-medium mb-2">{item.title}</p>
-              <button className="btn btn-primary w-fit">
-                <a href={item.url} target="_blank" rel="noopener noreferrer">
-                  觀看影片
-                </a>
-              </button>
+
+              <Link
+                to={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-primary w-fit"
+              >
+                觀看影片
+              </Link>
             </div>
           </div>
         ))}
@@ -163,16 +168,17 @@ const PodcastSection = ({ title, items, isLoading }) => (
                   loading="lazy"
                 />
               )}
-              <div className="flex-1">
-                <a
-                  href={item.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-lg font-medium hover:text-primary"
-                >
-                  {item.title}
-                </a>
-              </div>
+
+              <p className="text-lg font-medium mb-2">{item.title}</p>
+
+              <Link
+                to={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-primary w-fit"
+              >
+                收聽廣播
+              </Link>
             </div>
           </li>
         ))}
