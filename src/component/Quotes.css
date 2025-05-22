@@ -7,7 +7,7 @@
 }
 
 .quotes-container h1 {
-  color: #333;
+  /* color: #333; */
   margin-bottom: 30px;
 }
 
@@ -50,16 +50,16 @@
 }
 
 .card-front {
-  background-color: #ffffff;
-  color: #333;
+  /* background-color: #ffffff; */
+  /* color: #333; */
   transform: rotateY(180deg); /* 預設正面旋轉 180 度（隱藏） */
   font-size: 16px;
   text-align: center;
 }
 
 .card-back {
-  background-color: gray;
-  color: #fff;
+  /* background-color: gray;
+  color: #fff; */
   font-size: 18px;
   text-align: center;
 }
@@ -68,10 +68,10 @@
   margin: 0;
 }
 .dark .quotes-container h1 {
-  color: white;
+  /* color: white; */
 }
 
-.dark .card-front {
+/* .dark .card-front {
   background-color: #222;
   color: white;
 }
@@ -79,7 +79,7 @@
 .dark .card-back {
   background-color: #444;
   color: white;
-}
+} */
 /* 響應式設計 */
 @media (max-width: 600px) {
   .quotes-grid {

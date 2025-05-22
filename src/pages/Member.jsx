@@ -63,6 +63,7 @@ const Member = () => {
               alt="會員頭像"
               className="w-24 h-24 rounded-full object-cover"
               onError={(e) => (e.target.src = DEFAULT_PIC)}
+              loading="lazy"
             />
           </div>
           <div className="memberName">{memberName}</div>

@@ -67,7 +67,7 @@ const BookSection = ({ title, items, isLoading }) => (
                 className="w-32 h-48 object-cover mb-2 rounded"
                 loading="lazy"
               />
-              <p className="text-lg font-medium">{item.title}</p>
+              <p className="text-lg font-medium leading-loose">{item.title}</p>
 
               <Link
                 to={item.url}
@@ -118,7 +118,9 @@ const YoutubeSection = ({ title, items, isLoading }) => (
                 className="w-full h-40 object-cover rounded mb-2"
                 loading="lazy"
               />
-              <p className="text-lg font-medium mb-2">{item.title}</p>
+              <p className="text-lg font-medium mb-2 leading-loose">
+                {item.title}
+              </p>
 
               <Link
                 to={item.url}
@@ -169,7 +171,9 @@ const PodcastSection = ({ title, items, isLoading }) => (
                 />
               )}
 
-              <p className="text-lg font-medium mb-2">{item.title}</p>
+              <p className="text-lg font-medium mb-2 leading-loose">
+                {item.title}
+              </p>
 
               <Link
                 to={item.url}

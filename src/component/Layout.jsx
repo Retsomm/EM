@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Outlet, Link, useNavigate } from "react-router-dom";
+import ThemeToggle from "./ThemeToggle";
 import {
   Hamburger,
   Rocket,
@@ -9,15 +10,14 @@ import {
   ChevronsDown,
   ChevronsUp,
 } from "lucide-react";
-import { useAuth } from "./contexts/AuthContext";
-import ToTop from "./component/ToTop";
-import { useTheme } from "./contexts/ThemeContext";
-import { ToggleLeft, ToggleRight } from "lucide-react";
+import { useAuth } from "../contexts/AuthContext";
+import ToTop from "./ToTop";
 
-export default function Layout() {
+
+export default function Layout({ currentTheme, onToggleTheme }) {
   const [isPicVisible, setIsPicVisible] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
-  const { isDark, toggleTheme } = useTheme();
+
 
   const { user, loginType } = useAuth();
   const navigate = useNavigate();
@@ -91,28 +91,20 @@ export default function Layout() {
             )}
           </li>
           <li>
-            <button
-              className="ml-4 p-2 rounded-full "
-              onClick={() => {
-                toggleTheme();
-                toggleNav();
-              }}
-              aria-label="切換深淺色"
-              type="button"
-            >
-              {isDark ? (
-                <ToggleRight className="w-7 h-7 text-yellow-400" />
-              ) : (
-                <ToggleLeft className="w-7 h-7 text-gray-400" />
-              )}
-            </button>
+            <div className="navLink flex items-center gap-2">
+              <span className="text-sm"></span>
+              <ThemeToggle
+                currentTheme={currentTheme}
+                onToggle={onToggleTheme}
+              />
+            </div>
           </li>
         </ul>
       </div>
-      <nav className="fixed top-0 left-0 right-0 nav p-2 px-10 flex align-middle justify-between shadow-2xl z-1000">
+      <nav className="fixed top-0 left-0 right-0 nav p-2 px-10 flex align-middle justify-between shadow-2xl z-1000 items-center">
         <div className="ham md:hidden left-5 absolute rounded-full p-2">
           <Hamburger
-            className="hamburger text-white dark:text-black cursor-pointer"
+            className="hamburger cursor-pointer"
             onClick={toggleNav}
           />
         </div>
@@ -122,6 +114,7 @@ export default function Layout() {
               src="/logo.webp"
               className="max-w-md"
               alt="Elon Musk 首頁連結"
+              loading="lazy"
             />
           </Link>
         </div>
@@ -168,24 +161,19 @@ export default function Layout() {
             )}
           </li>
           <li>
-            <button
-              className="ml-4 p-2 rounded-full "
-              onClick={toggleTheme}
-              aria-label="切換深淺色"
-              type="button"
-            >
-              {isDark ? (
-                <ToggleRight className="w-7 h-7 text-yellow-400" />
-              ) : (
-                <ToggleLeft className="w-7 h-7 text-gray-400" />
-              )}
-            </button>
+            <div className="flex items-center gap-2">
+              <span className="text-sm"></span>
+              <ThemeToggle
+                currentTheme={currentTheme}
+                onToggle={onToggleTheme}
+              />
+            </div>
           </li>
         </ul>
       </nav>
       <div className="accordion mt-16 flex flex-col items-center justify-center h-fit">
         <div
-          className="cursor-pointer dark:text-white text-black p-3 text-center font-bold"
+          className="cursor-pointer p-3 text-center font-bold"
           onClick={togglePic}
         >
           {isPicVisible ? <ChevronsUp /> : <ChevronsDown />}
@@ -198,12 +186,13 @@ export default function Layout() {
         >
           <img
             src="/banner.webp"
-            alt=""
+            alt="Banner"
             className="w-full max-w-screen-lg h-auto"
+            loading="lazy"
           />
           <button
             type="button"
-            className="focus:outline-none text-white  bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 my-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900 w-fit"
+            className="focus:outline-none  bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 my-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900 w-fit"
           >
             OCCUPY MARS
           </button>
@@ -220,7 +209,7 @@ export default function Layout() {
       <footer>
         <div className="accordion flex flex-col items-center justify-center h-fit">
           <div
-            className="cursor-pointer text-black dark:text-white p-3 text-center font-bold"
+            className="cursor-pointer p-3 text-center font-bold"
             onClick={togglePic}
           >
             {isPicVisible ? <ChevronsUp /> : <ChevronsDown />}
@@ -232,8 +221,9 @@ export default function Layout() {
           >
             <img
               src="/mars.webp"
-              alt=""
+              alt="mars"
               className="w-full max-w-screen-lg h-auto"
+              loading="lazy"
             />
           </div>
         </div>

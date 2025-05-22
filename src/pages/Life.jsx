@@ -32,12 +32,38 @@ const events = [
   },
 ];
 
+// 定義與 DaisyUI 主題匹配的顏色
+const themes = {
+  light: {
+    background: "#ffffff", // 淺色背景
+    line: "#000000", // 黑色線條
+    dot: "#ef4444", // 紅色圓點 (DaisyUI 的紅色 primary)
+    text: "#000000", // 黑色年份文字
+    descText: "#4b5563", // 灰色描述文字 (DaisyUI 的 text-gray-600)
+    textBg: "rgba(255, 255, 255, 0.85)", // 淺色文字背景
+  },
+  dark: {
+    background: "#1f2937", // 深色背景 (DaisyUI 的 dark 主題背景色)
+    line: "#ffffff", // 白色線條
+    dot: "#f87171", // 稍亮的紅色圓點 (DaisyUI 的紅色 primary 變體)
+    text: "#ffffff", // 白色年份文字
+    descText: "#d1d5db", // 淺灰色描述文字 (DaisyUI 的 text-gray-300)
+    textBg: "rgba(55, 65, 81, 0.85)", // 深色文字背景 (DaisyUI 的 gray-700)
+  },
+};
+
 const Timeline = () => {
   const canvasRef = useRef(null);
   const [dimensions, setDimensions] = useState({
     width: Math.min(window.innerWidth * 0.9, 700),
     height: events.length * 180,
   });
+
+  // 獲取當前主題的函數
+  const getCurrentTheme = () => {
+    const theme = document.documentElement.getAttribute("data-theme");
+    return theme === "dark" ? "dark" : "light"; // 預設為 light
+  };
 
   // 監聽視窗大小變化
   useEffect(() => {
@@ -51,27 +77,42 @@ const Timeline = () => {
     return () => window.removeEventListener("resize", updateSize);
   }, []);
 
+  // 監聽主題變化
   useEffect(() => {
+    const observer = new MutationObserver(() => {
+      // 當 data-theme 變化時，觸發重新繪製
+      drawTimeline();
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
+
+    // 初次繪製
+    drawTimeline();
+
+    return () => observer.disconnect();
+  }, [dimensions]);
+
+  // 繪製時間軸的函數
+  const drawTimeline = () => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
 
-    // 取得螢幕的像素比例（像是 Retina 螢幕可能是 2 或更高）
     const dpr = window.devicePixelRatio || 1;
-
-    // 調整 Canvas 畫布的像素大小（放大 dpr 倍）
     canvas.width = dimensions.width * dpr;
     canvas.height = dimensions.height * dpr;
-
-    // 調整 Canvas 的顯示大小（用 CSS 控制，保持原本的尺寸）
     canvas.style.width = `${dimensions.width}px`;
     canvas.style.height = `${dimensions.height}px`;
-
-    // 縮放繪圖上下文，這樣畫圖時就不會變形
     ctx.scale(dpr, dpr);
 
-    // 清空畫布
-    ctx.clearRect(0, 0, dimensions.width, dimensions.height);
-    ctx.strokeStyle = "#000";
+    // 根據當前主題選擇顏色
+    const currentTheme = getCurrentTheme();
+    ctx.fillStyle = themes[currentTheme].background;
+    ctx.fillRect(0, 0, dimensions.width, dimensions.height);
+
+    ctx.strokeStyle = themes[currentTheme].line;
     ctx.lineWidth = 2;
 
     const { width, height } = dimensions;
@@ -83,8 +124,8 @@ const Timeline = () => {
       const x = baseX + offsetX;
       const y = 100 + i * 150;
 
-      // 畫紅色圓點
-      ctx.fillStyle = "#f00";
+      // 畫圓點
+      ctx.fillStyle = themes[currentTheme].dot;
       ctx.beginPath();
       ctx.arc(x, y, 7, 0, Math.PI * 2);
       ctx.fill();
@@ -108,18 +149,17 @@ const Timeline = () => {
       const textX = i % 2 === 0 ? x + 18 : x - textWidth - 18;
       const textBgX = textX - 4;
       const textBgY = y - 24;
-      ctx.fillStyle = "rgba(255,255,255,0.85)";
+      ctx.fillStyle = themes[currentTheme].textBg;
       ctx.fillRect(textBgX, textBgY, textWidth + 8, textHeight);
-      ctx.fillStyle = "#000";
+      ctx.fillStyle = themes[currentTheme].text;
       ctx.fillText(event.year, textX, y - 10);
 
       // 畫描述
       ctx.font = "13px Arial";
-      ctx.fillStyle = "#333";
+      ctx.fillStyle = themes[currentTheme].descText;
       const descWidth = width * 0.35;
       const descX = i % 2 === 0 ? x + 18 : x - descWidth - 18;
       const descY = y + 15;
-      // 先畫描述背景
       const descLines = wrapText(
         ctx,
         event.desc,
@@ -129,12 +169,12 @@ const Timeline = () => {
         18,
         true
       );
-      ctx.fillStyle = "rgba(255,255,255,0.85)";
+      ctx.fillStyle = themes[currentTheme].textBg;
       ctx.fillRect(descX - 4, descY - 13, descWidth + 8, descLines * 18 + 8);
-      ctx.fillStyle = "#333";
+      ctx.fillStyle = themes[currentTheme].descText;
       wrapText(ctx, event.desc, descX, descY, descWidth, 18);
     });
-  }, [dimensions]);
+  };
 
   // 文字自動換行
   function wrapText(
@@ -163,18 +203,13 @@ const Timeline = () => {
 
   return (
     <div
-      style={{
-        width: "100%",
-        display: "flex",
-        justifyContent: "center",
-        marginTop: 30,
-      }}
+      className="w-full flex justify-center mt-8"
     >
       <canvas
         ref={canvasRef}
         width={dimensions.width}
         height={dimensions.height}
-      ></canvas>
+      />
     </div>
   );
 };

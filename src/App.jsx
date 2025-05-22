@@ -1,7 +1,7 @@
 // src/App.jsx
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { lazy } from "react";
-
+import { useTheme } from "../hooks/useTheme";
 import "./App.css";
 import "./style.css";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -15,16 +15,22 @@ const Login = lazy(() => import("./pages/Login"));
 const Member = lazy(() => import("./pages/Member"));
 const Error = lazy(() => import("./pages/Error"));
 const MessageBoard = lazy(() => import("./pages/MessageBoard"));
-const Layout = lazy(() => import("./Layout"));
+const Layout = lazy(() => import("./component/Layout"));
 const ScrollToTop = lazy(() => import("./component/ScrollToTop"));
 const ProtectedRoute = lazy(() => import("./component/ProtectedRoute"));
 function App() {
+  const { currentTheme, toggleTheme } = useTheme();
   return (
     <AuthProvider>
       <BrowserRouter>
         <ScrollToTop />
         <Routes>
-          <Route path="/" element={<Layout />}>
+          <Route
+            path="/"
+            element={
+              <Layout currentTheme={currentTheme} onToggleTheme={toggleTheme} />
+            }
+          >
             <Route path="/" element={<Home />} />
             <Route path="/life" element={<Life />} />
             <Route path="/company" element={<Company />} />

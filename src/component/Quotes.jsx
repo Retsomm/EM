@@ -33,10 +33,14 @@ const Quotes = () => {
           >
             <div className="card-inner">
               <div className="card-front">
-                <p className="text-black dark:text-white">{quote}</p>
+                <p className="leading-loose">
+                  {quote}
+                </p>
               </div>
               <div className="card-back">
-                <p className="text-black dark:text-white">OPEN IT</p>
+                <p className="leading-loose">
+                  OPEN IT
+                </p>
               </div>
             </div>
           </div>

@@ -66,18 +66,16 @@ const Company = () => {
                 duration-300 
                 hover:scale-105 
                 hover:shadow-xl
-                bg-white
-                dark:bg-gray-800
                 
               `}
             >
               <div className="flex items-center mb-4">
                 {company.icon}
-                <h2 className="text-2xl font-semibold ml-4 text-white">
+                <h2 className="text-2xl font-semibold ml-4">
                   {company.name}
                 </h2>
               </div>
-              <p className="text-white dark:text-white mb-4">
+              <p className="mb-4 leading-loose">
                 {company.description}
               </p>
               <a
@@ -87,7 +85,6 @@ const Company = () => {
                 className="
                   inline-block 
                   bg-blue-500 
-                  text-white 
                   px-4 
                   py-2 
                   rounded-md 

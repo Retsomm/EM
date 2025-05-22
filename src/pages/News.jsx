@@ -44,17 +44,17 @@ export default function News() {
           ))}
         </div>
       ) : news.length === 0 ? (
-        <p className="text-center text-gray-500">目前沒有新聞</p>
+        <p className="text-center">目前沒有新聞</p>
       ) : (
         <div className="newsContainer flex flex-wrap justify-center">
           {news.map((article) => (
             <div
-              className="newsCard p-4 m-4 w-80 rounded-xl shadow-md"
+              className="newsCard p-4 m-4 w-80 rounded-xl shadow-md leading-loose"
               key={article.link}
             >
               <h3 className="font-bold text-lg mb-2">標題：{article.title}</h3>
               <h3 className="text-base mb-2">來源：{article.source}</h3>
-              <p className="text-sm text-gray-600 mb-3">
+              <p className="text-sm mb-3">
                 發布日期：{new Date(article.pubDate).toLocaleString()}
               </p>
               <a
